@@ -1,5 +1,5 @@
 # ExtendedAndroidTools
-Extended Android Tools is a set of makefiles and build environment cross compiling Linux tools we all love for Android. All tools are built using their native build systems (autotools, cmake, etc) and Android NDK. Reference build environment is provided via Docker.
+Extended Android Tools is a set of makefiles and build environment cross compiling Linux tools we all love for Android. All tools are built using their native build systems (autotools, cmake, etc) and Android NDK. Reference build environment is provided via Docker. 
 
 # List of supported software
 - [bpftrace](https://github.com/iovisor/bpftrace)
