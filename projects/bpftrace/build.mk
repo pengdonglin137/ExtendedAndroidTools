@@ -16,10 +16,14 @@ BPFTRACE_EXTRA_CMAKE_FLAGS = -DSTATIC_LINKING=ON
 BPFTRACE_EXTRA_LDFLAGS += "$(abspath $(ANDROID_OUT_DIR))/lib/liblzma.a"
 endif
 
+ifeq ($(BUILD_TYPE),Debug)
+BPFTRACE_NO_STRIP := true
+endif
+
 STRIP_THUNK = $(HOST_OUT_DIR)/bpftrace-strip-thunk
 
 $(BPFTRACE_ANDROID): $(ANDROID_OUT_DIR)/lib/libc++_shared.so
-ifeq ($(BUILD_TYPE), Debug)
+ifeq ($(BPFTRACE_NO_STRIP),true)
 	cd $(BPFTRACE_ANDROID_BUILD_DIR) && $(MAKE) install -j $(THREADS)
 else
 	cd $(BPFTRACE_ANDROID_BUILD_DIR) && $(MAKE) install/strip -j $(THREADS)
@@ -36,6 +40,7 @@ $(BPFTRACE_ANDROID_BUILD_DIR): $(HOST_OUT_DIR)/bin/flex $(STRIP_THUNK)
 		-DENABLE_MAN=OFF \
 		-DFLEX_EXECUTABLE=$(abspath $(HOST_OUT_DIR)/bin/flex) \
 		-DUSE_SYSTEM_BPF_BCC=ON \
+		-DUSE_SYSTEM_LIBBPF=ON \
 		-DALLOW_UNSAFE_PROBE=ON \
 		-DCMAKE_STRIP=$(abspath $(STRIP_THUNK))
 
