@@ -1,0 +1,15 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 26a049ee..f5dcb5d0 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -197,8 +197,8 @@ endif()
+ 
+ if (STATIC_LINKING)
+   if(ANDROID)
+-    target_link_libraries(libbpftrace "-Wl,-Bdynamic" "-ldl" "-lm" "-lz")
+-    target_link_libraries(runtime "-Wl,-Bdynamic" "-ldl" "-lm" "-lz")
++    target_link_libraries(libbpftrace "/OPT_NDK_SYSROOT/libm.a" "/OPT_NDK_SYSROOT/libz.a" "-Wl,-Bdynamic" "-ldl")
++    target_link_libraries(runtime "/OPT_NDK_SYSROOT/libm.a" "/OPT_NDK_SYSROOT/libz.a" "-Wl,-Bdynamic" "-ldl")
+   else()
+     target_link_libraries(libbpftrace "-Wl,-Bdynamic" "-lrt" "-lpthread" "-ldl" "-lm")
+     target_link_libraries(libbpftrace "-Wl,-Bstatic" "-lz")

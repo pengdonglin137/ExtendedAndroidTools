@@ -14,6 +14,8 @@ BPFTRACE_EXTRA_CMAKE_FLAGS = -DSTATIC_LINKING=ON
 # dependency, which causes undefined symbol errors when linking statically.
 # This fixes it by adding liblzma to the link line.
 BPFTRACE_EXTRA_LDFLAGS += "$(abspath $(ANDROID_OUT_DIR))/lib/liblzma.a"
+# Add NDK sysroot library path for static linking of libm
+BPFTRACE_EXTRA_LDFLAGS += "-L$(abspath $(ANDROID_SYSROOT_LIB_PATH))"
 endif
 
 ifeq ($(BUILD_TYPE),Debug)
@@ -21,6 +23,9 @@ BPFTRACE_NO_STRIP := true
 endif
 
 STRIP_THUNK = $(HOST_OUT_DIR)/bpftrace-strip-thunk
+
+BPFTRACE_PATCH_DIR = $(abspath projects/bpftrace/patches)
+BPFTRACE_NDK_SYSROOT = $(abspath $(ANDROID_SYSROOT_PATH))/usr/lib/$(ANDROID_SYSROOT_LIB_SUBDIR)
 
 $(BPFTRACE_ANDROID): $(ANDROID_OUT_DIR)/lib/libc++_shared.so
 ifeq ($(BPFTRACE_NO_STRIP),true)
@@ -32,6 +37,12 @@ endif
 	touch $@
 
 $(BPFTRACE_ANDROID_BUILD_DIR): $(HOST_OUT_DIR)/bin/flex $(STRIP_THUNK)
+	# Apply patches to bpftrace sources
+ifeq ($(STATIC_LINKING),true)
+	cd $(BPFTRACE_SRCS) && sed 's|/OPT_NDK_SYSROOT|$(BPFTRACE_NDK_SYSROOT)|g' \
+		$(BPFTRACE_PATCH_DIR)/static-linking.patch | git apply --whitespace=nowarn
+endif
+	cd $(BPFTRACE_SRCS) && git apply --whitespace=nowarn $(BPFTRACE_PATCH_DIR)/kprobe-fallback.patch
 	-mkdir $@
 	cd $@ && LDFLAGS="$(BPFTRACE_EXTRA_LDFLAGS)" $(CMAKE) $(BPFTRACE_SRCS) \
 		$(ANDROID_EXTRA_CMAKE_FLAGS) \

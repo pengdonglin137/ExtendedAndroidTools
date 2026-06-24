@@ -1,0 +1,12 @@
+diff --git a/src/bpftrace.cpp b/src/bpftrace.cpp
+index 7c72e96c..87ef9458 100644
+--- a/src/bpftrace.cpp
++++ b/src/bpftrace.cpp
+@@ -1271,6 +1271,7 @@ const util::FuncsModulesMap &BPFtrace::get_raw_tracepoints() const
+ bool BPFtrace::is_traceable_func(const std::string &func_name) const
+ {
+   const auto &funcs = get_traceable_funcs();
++  if (funcs.empty()) return true;
+   return funcs.contains(func_name);
+ }
+ 

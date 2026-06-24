@@ -7,6 +7,10 @@ $(eval $(call project-define,bcc))
 BCC_EXTRA_CFLAGS += "-I$(abspath $(ANDROID_OUT_DIR))/include" -include strings.h
 BCC_EXTRA_LDFLAGS = "-L$(abspath $(ANDROID_OUT_DIR))/lib"
 
+ifeq ($(STATIC_LINKING),true)
+BCC_EXTRA_CMAKE_FLAGS += -DBUILD_SHARED_LIBS=OFF -DBUILD_STATIC=ON
+endif
+
 $(BCC_ANDROID):
 ifeq ($(BUILD_TYPE), Debug)
 	cd $(ANDROID_BUILD_DIR)/bcc && $(MAKE) install -j $(THREADS)
