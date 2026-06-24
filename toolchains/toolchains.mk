@@ -12,11 +12,8 @@ ANDROID_SYSROOT_LIB_SUBDIR = aarch64-linux-android
 else ifeq ($(NDK_ARCH), x86_64)
 ANDROID_MAX_PAGE_SIZE = 16384
 ANDROID_SYSROOT_LIB_SUBDIR = x86_64-linux-android
-else ifeq ($(NDK_ARCH), armv7)
-ANDROID_MAX_PAGE_SIZE = 4096
-ANDROID_SYSROOT_LIB_SUBDIR = arm-linux-androideabi
 else
-$(error unknown abi $(NDK_ARCH))
+$(error unsupported abi $(NDK_ARCH), only arm64 and x86_64 are supported)
 endif
 
 ANDROID_SYSROOT_PATH = \

@@ -4,10 +4,8 @@ ifeq ($(NDK_ARCH), arm64)
 ANDROID_TRIPLE = aarch64-linux-android
 else ifeq ($(NDK_ARCH), x86_64)
 ANDROID_TRIPLE = x86_64-linux-android
-else ifeq ($(NDK_ARCH), armv7)
-ANDROID_TRIPLE = armv7a-linux-androideabi
 else
-$(error unknown abi $(NDK_ARCH))
+$(error unsupported abi $(NDK_ARCH), only arm64 and x86_64 are supported)
 endif
 
 ANDROID_CONFIG_SITE = $(ANDROID_OUT_DIR)/share/config.site
