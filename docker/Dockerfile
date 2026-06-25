@@ -1,8 +1,6 @@
 # Copyright (c) Meta Platforms, Inc. and affiliates.
 
-FROM micr.cloud.mioffice.cn/cockpit-build/ubuntu2204:v0.4.8
-
-USER root
+FROM ubuntu:jammy
 
 COPY jammy-install-deps.sh /
 COPY download-ndk.sh /
